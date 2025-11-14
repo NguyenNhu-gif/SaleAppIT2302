@@ -1,0 +1,20 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<h3 class="text-info text-center mt-5">XIN CHAO DEN VOI TRANG QUAN TRI</h3>
+<form method="post">
+    <div class="form-group mb-3 mt-3">
+        <input type="text" class="form-control" id="username" placeholder="Enter email" name="username">
+
+    </div>
+
+    <div class="form-group mt-3 mb-3">
+        <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+
+    </div>
+
+  <div class="form-group mt-3 mb-3">
+        <button class="btn btn-danger" type="submit">Đăng nhập</button>
+    </div>
+</form>
+{% endblock %}

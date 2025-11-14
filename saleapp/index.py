@@ -1,8 +1,9 @@
 import math
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import dao
-from saleapp import app
+from saleapp import app, login, admin
+from flask_login import login_user, current_user, logout_user
 
 @app.route("/")
 def index():
@@ -19,10 +20,32 @@ def index():
 def details(id):
     return render_template("products-details.html", pros = dao.get_product_by_id(id))
 
-@app.route("/login")
-def login():
+@app.route("/login", methods=['get', 'post'])
+def login_old():
+    err_msg = None
+    if current_user.is_authenticated:
+        return redirect('/')
+    if request.method.__eq__('POST'):
+        username = request.form.get("username")
+        password = request.form.get("pwd")
+
+        user = dao.auth_user(username, password)
+
+        if user:
+            login_user(user)
+            return redirect('/')
+        else:
+            err_msg = "Tai khoan hoac mat khau khong dung!"
+
     cates = dao.load_categories()
-    return render_template("login.html", cates=cates)
+    return render_template("login.html", cates=cates, err_msg=err_msg)
+@app.route("/logout")
+def logout_myuser():
+    logout_user()
+    return redirect("/login")
+@login.user_loader
+def get_user(id):
+    return dao.get_user_by_id(id)
 
 if __name__ == "__main__":
     with app.app_context():
